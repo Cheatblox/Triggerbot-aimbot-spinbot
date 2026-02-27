@@ -50,10 +50,18 @@ setreadonly(mt, true)
 task.spawn(function()
     while task.wait(1) do
         for _, p in pairs(Players:GetPlayers()) do
-            if p ~= player and p.Team ~= player.Team and p.Character and p.Character:FindFirstChild("Head") then
-                p.Character.Head.Size = Vector3.new(5, 5, 5)
-                p.Character.Head.Transparency = 0.5
-                p.Character.Head.CanCollide = false
+            if p ~= player and p.Team ~= player.Team and p.Character then
+                local head = p.Character:FindFirstChild("Head")
+                if head then
+                    head.Size = Vector3.new(5, 5, 5)
+                    head.Transparency = 0.5
+                    head.CanCollide = false
+                end
+                if not p.Character:FindFirstChild("Highlight") then
+                    local highlight = Instance.new("Highlight", p.Character)
+                    highlight.FillColor = Color3.fromRGB(255, 0, 0)
+                    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+                end
             end
         end
     end
@@ -66,7 +74,15 @@ RunService.RenderStepped:Connect(function()
     
     FOVContainer.Position = UserInputService:GetMouseLocation()
     
-    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(100), 0)
+    if player.Character then
+        for _, v in pairs(player.Character:GetChildren()) do
+            if v:IsA("BasePart") and (v.Name:find("Arm") or v.Name:find("Hand")) then
+                v.LocalTransparencyModifier = 1
+            end
+        end
+        local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            hrp.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(100), 0)
+        end
     end
 end)
