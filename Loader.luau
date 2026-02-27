@@ -61,6 +61,7 @@ task.spawn(function()
                     local highlight = Instance.new("Highlight", p.Character)
                     highlight.FillColor = Color3.fromRGB(255, 0, 0)
                     highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+                    highlight.FillAlpha = 0.5
                 end
             end
         end
@@ -75,9 +76,9 @@ RunService.RenderStepped:Connect(function()
     FOVContainer.Position = UserInputService:GetMouseLocation()
     
     if player.Character then
-        for _, v in pairs(player.Character:GetChildren()) do
-            if v:IsA("BasePart") and (v.Name:find("Arm") or v.Name:find("Hand")) then
-                v.LocalTransparencyModifier = 1
+        for _, v in pairs(player.Character:GetDescendants()) do
+            if v:IsA("BasePart") then
+                v.LocalTransparencyModifier = 0.7
             end
         end
         local hrp = player.Character:FindFirstChild("HumanoidRootPart")
