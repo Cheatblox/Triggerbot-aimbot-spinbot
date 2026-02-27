@@ -57,12 +57,6 @@ task.spawn(function()
                     head.Transparency = 0.5
                     head.CanCollide = false
                 end
-                if not p.Character:FindFirstChild("Highlight") then
-                    local highlight = Instance.new("Highlight", p.Character)
-                    highlight.FillColor = Color3.fromRGB(255, 0, 0)
-                    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
-                    highlight.FillAlpha = 0.5
-                end
             end
         end
     end
@@ -71,19 +65,19 @@ end)
 RunService.RenderStepped:Connect(function()
     player.CameraMode = Enum.CameraMode.Classic
     player.CameraMaxZoomDistance = 20
-    player.CameraMinZoomDistance = 5
+    player.CameraMinZoomDistance = 0
     
     FOVContainer.Position = UserInputService:GetMouseLocation()
     
     if player.Character then
+        local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            hrp.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(100), 0)
+        end
         for _, v in pairs(player.Character:GetDescendants()) do
             if v:IsA("BasePart") then
                 v.LocalTransparencyModifier = 0.7
             end
-        end
-        local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-        if hrp then
-            hrp.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(100), 0)
         end
     end
 end)
